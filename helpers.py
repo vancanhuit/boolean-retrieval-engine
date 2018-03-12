@@ -16,18 +16,29 @@ def assert_dir(path):
         sys.exit(1)
 
 
+def preprocess_text(text):
+    processed_text = text.lower()
+    processed_text = processed_text.replace("’", "'")
+    processed_text = processed_text.replace("“", '"')
+    processed_text = processed_text.replace("”", '"')
+
+    non_words = re.compile(r"[^A-Za-z']+")
+    processed_text = re.sub(non_words, ' ', processed_text)
+
+    return processed_text
+
+
 def get_text_from_file(filename):
     with open(filename, encoding='cp1252', mode='r') as f:
         text = f.read()
 
-    return text.lower()
+    return text
 
 
 def get_words_from_text(text):
-    non_words = re.compile(r'[^A-Za-z’]+')
     stop_words = set(stopwords.words('english'))
 
-    processed_text = re.sub(non_words, ' ', text)
+    processed_text = preprocess_text(text)
     words = {w for w in processed_text.split() if w not in stop_words}
 
     return words

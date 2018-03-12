@@ -1,7 +1,9 @@
 import os
+import re
 import argparse
 import pickle
 import sys
+from nltk.corpus import stopwords
 
 # Get inverted index from pickle file
 inverted_index_file = os.path.join(
@@ -12,13 +14,20 @@ with open(inverted_index_file, mode='rb') as f:
 
 dictionary = inverted_index.keys()
 
+non_words = re.compile(r"[^A-Za-z']+")
+stop_words = set(stopwords.words('english'))
+
 # Create a command line parser
 parser = argparse.ArgumentParser(description='Boolean query')
 parser.add_argument('query', help='words seperated by space')
 args = parser.parse_args()
 
+# Preprocess query
 query = args.query
-words = set(query.split())
+query = query.lower()
+query = re.sub(non_words, ' ', query)
+
+words = {word for word in query.split() if word not in stop_words}
 
 result = None
 for word in words:
