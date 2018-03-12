@@ -14,7 +14,7 @@ with open(inverted_index_file, mode='rb') as f:
 
 dictionary = inverted_index.keys()
 
-non_words = re.compile(r"[^A-Za-z']+")
+non_words = re.compile(r"[^A-Za-z'?]+")
 stop_words = set(stopwords.words('english'))
 
 # Create a command line parser
@@ -27,14 +27,14 @@ query = args.query
 query = query.lower()
 query = re.sub(non_words, ' ', query)
 
-words = {word for word in query.split() if word not in stop_words}
+# Remove all stopwords and words which is not in dictionary
+words = {
+    word for word in query.split()
+    if word not in stop_words and word in dictionary}
 
 result = None
 for word in words:
-    if word not in dictionary:
-        print('The "{}" is not in dictionary'.format(word))
-        sys.exit(1)
-    elif result is None:
+    if result is None:
         result = inverted_index.get(word)
     else:
         result.intersection_update(inverted_index.get(word))
