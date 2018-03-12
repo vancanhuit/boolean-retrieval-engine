@@ -49,4 +49,4 @@ $ python query.py "popular available"
 {'D:\\workspace\\boolean-retrieval-engine\\docs\\A Festival of Books.txt'}
 ```
 
-When provide input for the query script, words must be seperated by space. For example, with input `"popular available"`, it's mean that find all documents which contain `popular` AND `available`. The returned result will be a set of documents satisfy the query.
+When provide input for the query script, words must be seperated by space. For example, with input `"popular available"`, it's mean that find all documents which contain `popular` AND `available`. The returned result will be a set of documents satisfy the query. All numeric, punctuation and word which is not in dictionary will be ignored.
